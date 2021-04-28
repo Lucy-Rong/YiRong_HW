@@ -12996,8 +12996,10 @@ ul.typeahead-list  > li > a.pull-right {
 .highlight .mh { color: #666666 } /* Literal.Number.Hex */
 .highlight .mi { color: #666666 } /* Literal.Number.Integer */
 .highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
 .highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
 .highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
 .highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
 .highlight .s2 { color: #BA2121 } /* Literal.String.Double */
 .highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
@@ -13008,9 +13010,11 @@ ul.typeahead-list  > li > a.pull-right {
 .highlight .s1 { color: #BA2121 } /* Literal.String.Single */
 .highlight .ss { color: #19177C } /* Literal.String.Symbol */
 .highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
 .highlight .vc { color: #19177C } /* Name.Variable.Class */
 .highlight .vg { color: #19177C } /* Name.Variable.Global */
 .highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
     </style>
 <style type="text/css">
@@ -13085,7 +13089,7 @@ div#notebook {
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -13180,7 +13184,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">keras.datasets</span> <span class="k">import</span> <span class="n">cifar10</span>
@@ -13238,7 +13242,7 @@ number of classes: 10
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">to_one_hot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">num_class</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
@@ -13310,7 +13314,7 @@ Shape of y_test_vec: (10000, 10)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">rand_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="mi">50000</span><span class="p">)</span>
@@ -13385,16 +13389,72 @@ Shape of y_val: (10000, 10)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[91]:</div>
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">keras.layers</span> <span class="k">import</span> <span class="n">Conv2D</span><span class="p">,</span> <span class="n">MaxPooling2D</span><span class="p">,</span> <span class="n">Flatten</span><span class="p">,</span> <span class="n">Dense</span><span class="p">,</span><span class="n">BatchNormalization</span><span class="p">,</span><span class="n">Activation</span><span class="p">,</span><span class="n">Dropout</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense,BatchNormalization,Activation,Dropout</span>
+<span class="sd">from keras.models import Sequential</span>
+
+<span class="sd">model = Sequential()</span>
+
+<span class="sd">model.add(Conv2D(32, (3, 3), padding=&#39;same&#39;, input_shape=(32, 32, 3)))</span>
+<span class="sd">#model.add(BatchNormalization()) #insertion batchnor, between conv and activation</span>
+<span class="sd">model.add(Activation(&#39;relu&#39;))  #move the active funtion behind the batchnorm</span>
+
+<span class="sd">model.add(Conv2D(32, (3, 3), padding=&#39;same&#39;))</span>
+<span class="sd">model.add(BatchNormalization()) </span>
+<span class="sd">model.add(Activation(&#39;relu&#39;))</span>
+
+<span class="sd">model.add(MaxPooling2D((2, 2)))</span>
+
+<span class="sd">model.add(Conv2D(64, (3, 3), padding=&#39;same&#39;))</span>
+<span class="sd">model.add(BatchNormalization()) </span>
+<span class="sd">model.add(Activation(&#39;relu&#39;))</span>
+
+<span class="sd">model.add(Conv2D(64, (3, 3), padding=&#39;same&#39;))</span>
+<span class="sd">model.add(BatchNormalization()) </span>
+<span class="sd">model.add(Activation(&#39;relu&#39;))</span>
+
+<span class="sd">model.add(MaxPooling2D((2, 2)))</span>
+
+<span class="sd">model.add(Conv2D(128, (3, 3), padding=&#39;same&#39;))</span>
+<span class="sd">model.add(BatchNormalization()) </span>
+<span class="sd">model.add(Activation(&#39;relu&#39;))</span>
+
+<span class="sd">model.add(Conv2D(128, (3, 3), padding=&#39;same&#39;))</span>
+<span class="sd">model.add(BatchNormalization()) </span>
+<span class="sd">model.add(Activation(&#39;relu&#39;))</span>
+
+<span class="sd">model.add(Conv2D(128, (3, 3), padding=&#39;same&#39;))</span>
+<span class="sd">model.add(BatchNormalization()) </span>
+<span class="sd">model.add(Activation(&#39;relu&#39;))</span>
+
+<span class="sd">model.add(MaxPooling2D((4, 4)))</span>
+
+<span class="sd">model.add(Flatten())</span>
+
+<span class="sd">model.add(Dropout(0.5))  #insertion droupout trick,before 1st dense</span>
+<span class="sd">model.add(Dense(256))</span>
+<span class="sd">model.add(BatchNormalization()) </span>
+<span class="sd">model.add(Activation(&#39;relu&#39;))</span>
+
+<span class="sd">model.add(Dropout(0.5))  #insertion droupout trick,before 1st dense</span>
+<span class="sd">model.add(Dense(128))</span>
+<span class="sd">model.add(BatchNormalization()) </span>
+<span class="sd">model.add(Activation(&#39;relu&#39;))</span>
+<span class="sd">model.add(Dense(10, activation=&#39;softmax&#39;))</span>
+
+<span class="sd">model.summary()</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="k">import</span> <span class="n">Conv2D</span><span class="p">,</span> <span class="n">MaxPooling2D</span><span class="p">,</span> <span class="n">Flatten</span><span class="p">,</span> <span class="n">Dense</span><span class="p">,</span><span class="n">BatchNormalization</span><span class="p">,</span><span class="n">Activation</span><span class="p">,</span><span class="n">Dropout</span>
 <span class="kn">from</span> <span class="nn">keras.models</span> <span class="k">import</span> <span class="n">Sequential</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
 
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
-<span class="c1">#model.add(BatchNormalization()) #insertion batchnor, between conv and activation</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> <span class="c1">#insertion batchnor, between conv and activation</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>  <span class="c1">#move the active funtion behind the batchnorm</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
@@ -13404,29 +13464,20 @@ Shape of y_val: (10000, 10)
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling2D</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
-<span class="c1">#model.add(BatchNormalization()) </span>
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling2D</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
-<span class="c1">#model.add(BatchNormalization()) </span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling2D</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
-
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
@@ -13435,13 +13486,18 @@ Shape of y_val: (10000, 10)
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Flatten</span><span class="p">())</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>  <span class="c1">#insertion droupout trick,before 1st dense</span>
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">))</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>  <span class="c1">#insertion droupout trick,before 1st dense</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">))</span>
-<span class="c1">#model.add(BatchNormalization()) </span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> 
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>  <span class="c1">#insertion droupout trick,before 1st dense</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">))</span>
 
@@ -13462,79 +13518,83 @@ Shape of y_val: (10000, 10)
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Model: &#34;sequential_13&#34;
+<pre>Model: &#34;sequential_7&#34;
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #   
 =================================================================
-conv2d_99 (Conv2D)           (None, 32, 32, 32)        896       
+conv2d_44 (Conv2D)           (None, 8, 8, 32)          896       
 _________________________________________________________________
-activation_126 (Activation)  (None, 32, 32, 32)        0         
+batch_normalization_45 (Batc (None, 8, 8, 32)          128       
 _________________________________________________________________
-conv2d_100 (Conv2D)          (None, 32, 32, 32)        9248      
+activation_55 (Activation)   (None, 8, 8, 32)          0         
 _________________________________________________________________
-batch_normalization_75 (Batc (None, 32, 32, 32)        128       
+conv2d_45 (Conv2D)           (None, 8, 8, 32)          9248      
 _________________________________________________________________
-activation_127 (Activation)  (None, 32, 32, 32)        0         
+batch_normalization_46 (Batc (None, 8, 8, 32)          128       
 _________________________________________________________________
-max_pooling2d_49 (MaxPooling (None, 16, 16, 32)        0         
+activation_56 (Activation)   (None, 8, 8, 32)          0         
 _________________________________________________________________
-conv2d_101 (Conv2D)          (None, 16, 16, 64)        18496     
+max_pooling2d_21 (MaxPooling (None, 4, 4, 32)          0         
 _________________________________________________________________
-activation_128 (Activation)  (None, 16, 16, 64)        0         
+conv2d_46 (Conv2D)           (None, 4, 4, 64)          18496     
 _________________________________________________________________
-conv2d_102 (Conv2D)          (None, 16, 16, 64)        36928     
+batch_normalization_47 (Batc (None, 4, 4, 64)          256       
 _________________________________________________________________
-batch_normalization_76 (Batc (None, 16, 16, 64)        256       
+activation_57 (Activation)   (None, 4, 4, 64)          0         
 _________________________________________________________________
-activation_129 (Activation)  (None, 16, 16, 64)        0         
+max_pooling2d_22 (MaxPooling (None, 2, 2, 64)          0         
 _________________________________________________________________
-max_pooling2d_50 (MaxPooling (None, 8, 8, 64)          0         
+conv2d_47 (Conv2D)           (None, 2, 2, 128)         73856     
 _________________________________________________________________
-conv2d_103 (Conv2D)          (None, 8, 8, 128)         73856     
+batch_normalization_48 (Batc (None, 2, 2, 128)         512       
 _________________________________________________________________
-activation_130 (Activation)  (None, 8, 8, 128)         0         
+activation_58 (Activation)   (None, 2, 2, 128)         0         
 _________________________________________________________________
-conv2d_104 (Conv2D)          (None, 8, 8, 128)         147584    
+conv2d_48 (Conv2D)           (None, 2, 2, 128)         147584    
 _________________________________________________________________
-batch_normalization_77 (Batc (None, 8, 8, 128)         512       
+batch_normalization_49 (Batc (None, 2, 2, 128)         512       
 _________________________________________________________________
-activation_131 (Activation)  (None, 8, 8, 128)         0         
+activation_59 (Activation)   (None, 2, 2, 128)         0         
 _________________________________________________________________
-max_pooling2d_51 (MaxPooling (None, 4, 4, 128)         0         
+conv2d_49 (Conv2D)           (None, 2, 2, 128)         147584    
 _________________________________________________________________
-conv2d_105 (Conv2D)          (None, 4, 4, 256)         295168    
+batch_normalization_50 (Batc (None, 2, 2, 128)         512       
 _________________________________________________________________
-activation_132 (Activation)  (None, 4, 4, 256)         0         
+activation_60 (Activation)   (None, 2, 2, 128)         0         
 _________________________________________________________________
-conv2d_106 (Conv2D)          (None, 4, 4, 256)         590080    
+max_pooling2d_23 (MaxPooling (None, 1, 1, 128)         0         
 _________________________________________________________________
-batch_normalization_78 (Batc (None, 4, 4, 256)         1024      
+flatten_5 (Flatten)          (None, 128)               0         
 _________________________________________________________________
-activation_133 (Activation)  (None, 4, 4, 256)         0         
+dropout_11 (Dropout)         (None, 128)               0         
 _________________________________________________________________
-max_pooling2d_52 (MaxPooling (None, 2, 2, 256)         0         
+dense_16 (Dense)             (None, 256)               33024     
 _________________________________________________________________
-flatten_13 (Flatten)         (None, 1024)              0         
+batch_normalization_51 (Batc (None, 256)               1024      
 _________________________________________________________________
-dropout_27 (Dropout)         (None, 1024)              0         
+activation_61 (Activation)   (None, 256)               0         
 _________________________________________________________________
-dense_40 (Dense)             (None, 512)               524800    
+dropout_12 (Dropout)         (None, 256)               0         
 _________________________________________________________________
-batch_normalization_79 (Batc (None, 512)               2048      
+dense_17 (Dense)             (None, 256)               65792     
 _________________________________________________________________
-activation_134 (Activation)  (None, 512)               0         
+batch_normalization_52 (Batc (None, 256)               1024      
 _________________________________________________________________
-dropout_28 (Dropout)         (None, 512)               0         
+activation_62 (Activation)   (None, 256)               0         
 _________________________________________________________________
-dense_41 (Dense)             (None, 256)               131328    
+dropout_13 (Dropout)         (None, 256)               0         
 _________________________________________________________________
-activation_135 (Activation)  (None, 256)               0         
+dense_18 (Dense)             (None, 128)               32896     
 _________________________________________________________________
-dense_42 (Dense)             (None, 10)                2570      
+batch_normalization_53 (Batc (None, 128)               512       
+_________________________________________________________________
+activation_63 (Activation)   (None, 128)               0         
+_________________________________________________________________
+dense_19 (Dense)             (None, 10)                1290      
 =================================================================
-Total params: 1,834,922
-Trainable params: 1,832,938
-Non-trainable params: 1,984
+Total params: 535,274
+Trainable params: 532,970
+Non-trainable params: 2,304
 _________________________________________________________________
 </pre>
 </div>
@@ -13546,7 +13606,7 @@ _________________________________________________________________
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[93]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">keras</span> <span class="k">import</span> <span class="n">optimizers</span>
@@ -13565,10 +13625,10 @@ _________________________________________________________________
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[94]:</div>
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;accuracy: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
 </pre></div>
 
@@ -13587,108 +13647,73 @@ _________________________________________________________________
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Epoch 1/50
-1250/1250 [==============================] - 11s 8ms/step - loss: 1.7960 - acc: 0.3483 - val_loss: 1.4469 - val_acc: 0.5071
-Epoch 2/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 1.1301 - acc: 0.5961 - val_loss: 1.6647 - val_acc: 0.4849
-Epoch 3/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.9370 - acc: 0.6755 - val_loss: 0.9299 - val_acc: 0.6808
-Epoch 4/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.8082 - acc: 0.7245 - val_loss: 0.8166 - val_acc: 0.7125
-Epoch 5/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.7216 - acc: 0.7571 - val_loss: 0.8935 - val_acc: 0.6951
-Epoch 6/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.6497 - acc: 0.7834 - val_loss: 0.7970 - val_acc: 0.7346
-Epoch 7/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.5911 - acc: 0.8046 - val_loss: 0.9131 - val_acc: 0.7148
-Epoch 8/50
-1250/1250 [==============================] - 11s 8ms/step - loss: 0.5492 - acc: 0.8187 - val_loss: 0.8154 - val_acc: 0.7516
-Epoch 9/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.5026 - acc: 0.8356 - val_loss: 0.6870 - val_acc: 0.7775
-Epoch 10/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.4651 - acc: 0.8473 - val_loss: 0.8390 - val_acc: 0.7688
-Epoch 11/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.4304 - acc: 0.8598 - val_loss: 0.8617 - val_acc: 0.7564
-Epoch 12/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.4056 - acc: 0.8649 - val_loss: 0.7616 - val_acc: 0.7926
-Epoch 13/50
-1250/1250 [==============================] - 9s 8ms/step - loss: 0.3782 - acc: 0.8768 - val_loss: 1.1207 - val_acc: 0.7443
-Epoch 14/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.3674 - acc: 0.8831 - val_loss: 0.8806 - val_acc: 0.7597
-Epoch 15/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.3344 - acc: 0.8936 - val_loss: 1.6477 - val_acc: 0.7338
-Epoch 16/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.3153 - acc: 0.9006 - val_loss: 1.0653 - val_acc: 0.7705
-Epoch 17/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.2954 - acc: 0.9075 - val_loss: 0.7578 - val_acc: 0.7917
-Epoch 18/50
-1250/1250 [==============================] - 9s 8ms/step - loss: 0.2846 - acc: 0.9097 - val_loss: 0.7834 - val_acc: 0.7884
-Epoch 19/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.2725 - acc: 0.9153 - val_loss: 1.1820 - val_acc: 0.7786
-Epoch 20/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.2397 - acc: 0.9272 - val_loss: 1.0781 - val_acc: 0.7858
-Epoch 21/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.2300 - acc: 0.9307 - val_loss: 0.8481 - val_acc: 0.7979
-Epoch 22/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.2317 - acc: 0.9330 - val_loss: 0.9605 - val_acc: 0.7864
-Epoch 23/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.2181 - acc: 0.9344 - val_loss: 1.0371 - val_acc: 0.7936
-Epoch 24/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.2141 - acc: 0.9361 - val_loss: 0.9084 - val_acc: 0.8181
-Epoch 25/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1972 - acc: 0.9410 - val_loss: 1.2089 - val_acc: 0.7808
-Epoch 26/50
-1250/1250 [==============================] - 9s 7ms/step - loss: 0.1896 - acc: 0.9461 - val_loss: 1.1742 - val_acc: 0.7527
-Epoch 27/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1845 - acc: 0.9454 - val_loss: 1.6375 - val_acc: 0.7440
-Epoch 28/50
-1250/1250 [==============================] - 9s 8ms/step - loss: 0.1785 - acc: 0.9479 - val_loss: 1.7766 - val_acc: 0.7669
-Epoch 29/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1643 - acc: 0.9502 - val_loss: 0.8183 - val_acc: 0.8079
-Epoch 30/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1697 - acc: 0.9536 - val_loss: 1.2437 - val_acc: 0.7891
-Epoch 31/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1718 - acc: 0.9535 - val_loss: 1.5600 - val_acc: 0.7785
-Epoch 32/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1501 - acc: 0.9560 - val_loss: 2.0313 - val_acc: 0.7700
-Epoch 33/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1468 - acc: 0.9580 - val_loss: 1.2983 - val_acc: 0.7995
-Epoch 34/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1439 - acc: 0.9595 - val_loss: 1.6707 - val_acc: 0.7943
-Epoch 35/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1403 - acc: 0.9600 - val_loss: 1.1874 - val_acc: 0.7767
-Epoch 36/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1324 - acc: 0.9640 - val_loss: 1.8739 - val_acc: 0.7460
-Epoch 37/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1330 - acc: 0.9637 - val_loss: 1.6163 - val_acc: 0.7944
-Epoch 38/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1323 - acc: 0.9635 - val_loss: 1.1389 - val_acc: 0.8030
-Epoch 39/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1238 - acc: 0.9665 - val_loss: 1.5018 - val_acc: 0.8045
-Epoch 40/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1164 - acc: 0.9674 - val_loss: 1.8324 - val_acc: 0.7584
-Epoch 41/50
-1250/1250 [==============================] - 9s 8ms/step - loss: 0.1174 - acc: 0.9679 - val_loss: 1.5497 - val_acc: 0.7817
-Epoch 42/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1175 - acc: 0.9689 - val_loss: 1.1539 - val_acc: 0.7932
-Epoch 43/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1205 - acc: 0.9688 - val_loss: 1.4545 - val_acc: 0.8029
-Epoch 44/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1178 - acc: 0.9695 - val_loss: 1.5890 - val_acc: 0.7718
-Epoch 45/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1120 - acc: 0.9713 - val_loss: 1.4145 - val_acc: 0.8029
-Epoch 46/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1101 - acc: 0.9717 - val_loss: 1.2720 - val_acc: 0.7942
-Epoch 47/50
-1250/1250 [==============================] - 9s 8ms/step - loss: 0.1174 - acc: 0.9713 - val_loss: 2.0832 - val_acc: 0.7928
-Epoch 48/50
-1250/1250 [==============================] - 11s 9ms/step - loss: 0.1033 - acc: 0.9731 - val_loss: 1.3990 - val_acc: 0.7734
-Epoch 49/50
-1250/1250 [==============================] - 10s 8ms/step - loss: 0.1096 - acc: 0.9742 - val_loss: 1.1052 - val_acc: 0.8022
-Epoch 50/50
-1250/1250 [==============================] - 9s 8ms/step - loss: 0.0992 - acc: 0.9737 - val_loss: 1.4732 - val_acc: 0.8165
-1250/1250 [==============================] - 4s 3ms/step - loss: 0.0376 - acc: 0.9899
-accuracy: 0.9899250268936157
-</pre>
+  768/40000 [..............................] - ETA: 5:50 - loss: 2.3355 - acc: 0.0982</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">KeyboardInterrupt</span>                         Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-35-87b74b18edf1&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>history <span class="ansi-yellow-intense-fg ansi-bold">=</span> model<span class="ansi-yellow-intense-fg ansi-bold">.</span>fit<span class="ansi-yellow-intense-fg ansi-bold">(</span>x_tr<span class="ansi-yellow-intense-fg ansi-bold">,</span> y_tr<span class="ansi-yellow-intense-fg ansi-bold">,</span> batch_size<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">1</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> epochs<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">50</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> validation_data<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">(</span>x_val<span class="ansi-yellow-intense-fg ansi-bold">,</span> y_val<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">      2</span> print<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;accuracy: &#39;</span> <span class="ansi-yellow-intense-fg ansi-bold">+</span> str<span class="ansi-yellow-intense-fg ansi-bold">(</span>model<span class="ansi-yellow-intense-fg ansi-bold">.</span>evaluate<span class="ansi-yellow-intense-fg ansi-bold">(</span>x_tr<span class="ansi-yellow-intense-fg ansi-bold">,</span> y_tr<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">1</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\tensorflow\python\keras\engine\training.py</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-intense-fg ansi-bold">(self, x, y, batch_size, epochs, verbose, callbacks, validation_split, validation_data, shuffle, class_weight, sample_weight, initial_epoch, steps_per_epoch, validation_steps, validation_batch_size, validation_freq, max_queue_size, workers, use_multiprocessing)</span>
+<span class="ansi-green-fg">   1098</span>                 _r=1):
+<span class="ansi-green-fg">   1099</span>               callbacks<span class="ansi-yellow-intense-fg ansi-bold">.</span>on_train_batch_begin<span class="ansi-yellow-intense-fg ansi-bold">(</span>step<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 1100</span><span class="ansi-yellow-intense-fg ansi-bold">               </span>tmp_logs <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>train_function<span class="ansi-yellow-intense-fg ansi-bold">(</span>iterator<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">   1101</span>               <span class="ansi-green-intense-fg ansi-bold">if</span> data_handler<span class="ansi-yellow-intense-fg ansi-bold">.</span>should_sync<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">   1102</span>                 context<span class="ansi-yellow-intense-fg ansi-bold">.</span>async_wait<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\tensorflow\python\eager\def_function.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-intense-fg ansi-bold">(self, *args, **kwds)</span>
+<span class="ansi-green-fg">    826</span>     tracing_count <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>experimental_get_tracing_count<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    827</span>     <span class="ansi-green-intense-fg ansi-bold">with</span> trace<span class="ansi-yellow-intense-fg ansi-bold">.</span>Trace<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_name<span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-green-intense-fg ansi-bold">as</span> tm<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 828</span><span class="ansi-yellow-intense-fg ansi-bold">       </span>result <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_call<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">*</span>args<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwds<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    829</span>       compiler <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-blue-intense-fg ansi-bold">&#34;xla&#34;</span> <span class="ansi-green-intense-fg ansi-bold">if</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_experimental_compile <span class="ansi-green-intense-fg ansi-bold">else</span> <span class="ansi-blue-intense-fg ansi-bold">&#34;nonXla&#34;</span>
+<span class="ansi-green-fg">    830</span>       new_tracing_count <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>experimental_get_tracing_count<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\tensorflow\python\eager\def_function.py</span> in <span class="ansi-cyan-fg">_call</span><span class="ansi-blue-intense-fg ansi-bold">(self, *args, **kwds)</span>
+<span class="ansi-green-fg">    853</span>       <span class="ansi-red-intense-fg ansi-bold"># In this case we have created variables on the first call, so we run the</span>
+<span class="ansi-green-fg">    854</span>       <span class="ansi-red-intense-fg ansi-bold"># defunned version which is guaranteed to never create variables.</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 855</span><span class="ansi-yellow-intense-fg ansi-bold">       </span><span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_stateless_fn<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">*</span>args<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwds<span class="ansi-yellow-intense-fg ansi-bold">)</span>  <span class="ansi-red-intense-fg ansi-bold"># pylint: disable=not-callable</span>
+<span class="ansi-green-fg">    856</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_stateful_fn <span class="ansi-green-intense-fg ansi-bold">is</span> <span class="ansi-green-intense-fg ansi-bold">not</span> <span class="ansi-green-intense-fg ansi-bold">None</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    857</span>       <span class="ansi-red-intense-fg ansi-bold"># Release the lock early so that multiple threads can perform the call</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\tensorflow\python\eager\function.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-intense-fg ansi-bold">(self, *args, **kwargs)</span>
+<span class="ansi-green-fg">   2941</span>        filtered_flat_args) = self._maybe_define_function(args, kwargs)
+<span class="ansi-green-fg">   2942</span>     return graph_function._call_flat(
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 2943</span><span class="ansi-yellow-intense-fg ansi-bold">         filtered_flat_args, captured_inputs=graph_function.captured_inputs)  # pylint: disable=protected-access
+</span><span class="ansi-green-fg">   2944</span> 
+<span class="ansi-green-fg">   2945</span>   <span class="ansi-yellow-intense-fg ansi-bold">@</span>property
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\tensorflow\python\eager\function.py</span> in <span class="ansi-cyan-fg">_call_flat</span><span class="ansi-blue-intense-fg ansi-bold">(self, args, captured_inputs, cancellation_manager)</span>
+<span class="ansi-green-fg">   1917</span>       <span class="ansi-red-intense-fg ansi-bold"># No tape is watching; skip to running the function.</span>
+<span class="ansi-green-fg">   1918</span>       return self._build_call_outputs(self._inference_function.call(
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 1919</span><span class="ansi-yellow-intense-fg ansi-bold">           ctx, args, cancellation_manager=cancellation_manager))
+</span><span class="ansi-green-fg">   1920</span>     forward_backward = self._select_forward_and_backward_functions(
+<span class="ansi-green-fg">   1921</span>         args<span class="ansi-yellow-intense-fg ansi-bold">,</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\tensorflow\python\eager\function.py</span> in <span class="ansi-cyan-fg">call</span><span class="ansi-blue-intense-fg ansi-bold">(self, ctx, args, cancellation_manager)</span>
+<span class="ansi-green-fg">    558</span>               inputs<span class="ansi-yellow-intense-fg ansi-bold">=</span>args<span class="ansi-yellow-intense-fg ansi-bold">,</span>
+<span class="ansi-green-fg">    559</span>               attrs<span class="ansi-yellow-intense-fg ansi-bold">=</span>attrs<span class="ansi-yellow-intense-fg ansi-bold">,</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 560</span><span class="ansi-yellow-intense-fg ansi-bold">               ctx=ctx)
+</span><span class="ansi-green-fg">    561</span>         <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    562</span>           outputs = execute.execute_with_cancellation(
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\tensorflow\python\eager\execute.py</span> in <span class="ansi-cyan-fg">quick_execute</span><span class="ansi-blue-intense-fg ansi-bold">(op_name, num_outputs, inputs, attrs, ctx, name)</span>
+<span class="ansi-green-fg">     58</span>     ctx<span class="ansi-yellow-intense-fg ansi-bold">.</span>ensure_initialized<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     59</span>     tensors = pywrap_tfe.TFE_Py_Execute(ctx._handle, device_name, op_name,
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 60</span><span class="ansi-yellow-intense-fg ansi-bold">                                         inputs, attrs, num_outputs)
+</span><span class="ansi-green-fg">     61</span>   <span class="ansi-green-intense-fg ansi-bold">except</span> core<span class="ansi-yellow-intense-fg ansi-bold">.</span>_NotOkStatusException <span class="ansi-green-intense-fg ansi-bold">as</span> e<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">     62</span>     <span class="ansi-green-intense-fg ansi-bold">if</span> name <span class="ansi-green-intense-fg ansi-bold">is</span> <span class="ansi-green-intense-fg ansi-bold">not</span> <span class="ansi-green-intense-fg ansi-bold">None</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+
+<span class="ansi-red-intense-fg ansi-bold">KeyboardInterrupt</span>: </pre>
 </div>
 </div>
 
@@ -13698,7 +13723,7 @@ accuracy: 0.9899250268936157
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[96]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -13733,7 +13758,7 @@ accuracy: 0.9899250268936157
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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et118T33nj2qDz3kzhv8J4z1hjt8uGpKivtMy5aq99+vun17fNP3u9+56/7gg/geVxMXCAYCk0OWfwdMKLdPG+BLYDWwEciIcKxhQC6Q2759+7j/ghLBSgQe2rtX9cEH3Q193Dj3zx+LkhLVfv1UmzZV/eab8PtMmuT+UB99FL/0hrNxowsC//d/brm4WPX8893N66WX4neewkJ3Uwx+AQ85RHX0aNV33on99xar775TveIKdzNt3lz1jjtcNUgkAweqHnRQ/NLxxhuq3bq56+zb1wWkXr3cP92uXdE/u3y5amqqC1oLFqiec447zi9+oTpxouru3TVP36efumPefnvNjxVGMgeCm4Hfa1mJYBmQEu249aVEEK2NwNTA2rWqZ53lfqFHHOHeMzNVv/oq+uf27nU5RVD9xz8i77d9u8sNnn9+fNNd3j/+4dKSm1u2bscOV1Jp3Dh+gWj0aHdj/uADVyd//vkuEIILpMOHq+7cWfPz3HefaoMGqk2auCqugoLKP/Paay4d//lPzc6dl6f629+6Yx12mOqsWWUln7fecusfeST6MS6+WLVZM9Wffipb99FHqied5D7fsaMrtd19twsML76o+v77LtjEEiT27lU99ljVNm1ce4kHkrlqaClwSMjyCqB1tOPWl0CgmuBG4e+/V01Pd0Xx2rZ9u+o116jeeKMrli9bVrEapjreeEO1dWt3s5k0yf2zv/SSu84mTdw/e/n64C1b3E23a1f373DmmZXXGY8d6/5o335b8zSHU1KietRRLoCV9/PPLq0HHlh5cKvMV1+5XO7w4fuu375ddcYMV00Brh6/Jrny9etdnfe557qqt1jt3u3+dpddVr3zlpS4m3LTpq4E8te/hs/5n366aqtWqps3hz9OsK3mzjvDn+ONN1R//WuXQQhXzD/6aFfCi+bpp92+//531a8zRokKBA0CN/ZOIY3FR5Xb53VgaODnI4AfCTwjIdKrrgWCpO0BdN117s/vdc62vJIS1csvd7+QJk3K/lmaNVPt00f1+utVP/64asfcvdvlMkH1V79S/fLLfbf/+GNZUf7001VXrXK5xBtvVN1vP7f++ONVn3suthvejz+6HkWjR1ctnbH66COXpsmTw29fsUL14IPdF2revOqf57zz3PWvWxd5n2DJZPDg6vda+te/KpZuYjVypPueRLpJR7J6dVnJ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JnuVHkaOhIED4bbbYO7cfbfZYDJjPJGTAx07QkqKe8/Jqdnx1q9fT48ePejRowe/+MUvaNu2benynj17on42NzeX66+/vtJz9O7du2aJrIO8bCw+DshT1RUAIjINGAAs8/CckYnA5MmwYAFceqmrKkpPd9tsMJkxcZeTA8OGuUeBA6xc6ZYBsrKqd8z09HQWLlwIwN13303z5s255ZZbSrcXFxfToEH421pmZiaZmZmVnmNu+YyiD3hZNdQW+CFkeXVgXXkXichiEXlJRA4JdyARGSYiuSKSWxisz6+O/feH6dPdjX/IkLL2AptnyJi4Gzu2LAgE7djh1sfT0KFDGT58OMcffzy33norn3/+OSeeeCI9e/akd+/eLF++HID333+f8847D3BB5KqrruKUU07h0EMP5bHHHis9XvPmzUv3P+WUUxg4cCDdunUjKysLVQVg9uzZdOvWjYyMDK6//vrS44bKz8/npJNOolevXvTq1WufAHP//fdz9NFH0717d8aMcbXmeXl5nHHGGXTv3p1evXrx3XffxfcXFUWiu4/OAp5X1d0ici3wDHBa+Z1UNRvIBsjMzNQanTEjAx56yDUc//3v8Ic/uMDQp0+NDmuM2deqVVVbXxOrV69m7ty5pKamsmXLFj766CMaNGjAO++8w+23387LL79c4TNff/017733Hlu3buXwww9nxIgRFfref/HFFyxdupRf/vKX9OnTh08++YTMzEyuvfZaPvzwQzp16sSgQYPCpql169a8/fbbNGnShG+//ZZBgwaRm5vL66+/zmuvvcZnn31GWloaGzZsACArK4sxY8ZwwQUXsGvXLkrCdWzxiJeBYA0QmsNvF1hXSlXXhyxOBv7mYXrKjBwJ77/v2gtOOAF+/tnaCIyJs/btXXVQuPXxdvHFF5OamgrA5s2bGTJkCN9++y0iQlFRUdjPnHvuuTRu3JjGjRvTunVr1q1bR7t27fbZ57jjjitd16NHD/Lz82nevDmHHnpoaT/9QYMGkZ2dXeH4RUVFjB49moULF5Kamso333wDwDvvvMOVV15JWloaAC1btmTr1q2sWbOGCy64AHCDwmqTl1VD84AuItJJRBoBlwEzQ3cQkTYhi/2BrzxMT+iJXXtBhw5w4YWuisiqhoyJq/Hj3UP/QqWlufXx1izkyYJ33nknp556KkuWLGHWrFkR+9Q3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
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYUAAAEKCAYAAAD9xUlFAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADl0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uIDMuMC4yLCBodHRwOi8vbWF0cGxvdGxpYi5vcmcvOIA7rQAAIABJREFUeJzt3Xl8VOXZ+P/PBQQhgOyoZUnQ4gIhmxGkYqtV2apQwSqIrUuVnwtqtcsXq1W/WupTrXWpfn2KrX18NIpURVER64JatSqgMBAQEhEwghAQZAlbkuv3xz0ThjBJzmTmzEwm1/v1mtfMnDlzzp2TZK65t+sWVcUYY4wBaJXsAhhjjEkdFhSMMcbUsqBgjDGmlgUFY4wxtSwoGGOMqWVBwRhjTC0LCsYYY2pZUDDGGFPLgoIxxphabZJdgGj16NFDs7Ozk10MY4xpVhYtWrRZVXs2tl+zCwrZ2dksXLgw2cUwxphmRUTWetnPmo+MMcbUsqBgjDGmlgUFY4wxtZpdn0Ik+/fvp7y8nD179iS7KKYB7dq1o0+fPmRkZCS7KMaYeqRFUCgvL6dTp05kZ2cjIskujolAVdmyZQvl5eX0798/2cUxxtQjLZqP9uzZQ/fu3S0gpDARoXv37labM6YJioshOxtatXL3xcX+nSstagqABYRmwH5HxkSvuBimTIHKSvd87Vr3HGDy5PifLy1qCsYYk8pi+aZ/880HAkJIZaXb7gcLCnGwZcsW8vPzyc/P58gjj6R37961z/ft2+fpGJdeeikrV65scJ+HH36YYj/rjcaYuAt901+7FlQPfNP3+q+8bl1022Omqs3qduKJJ2pdy5cvP2RbQ558UjUrS1XE3T/5ZFRvb9Btt92m99xzzyHba2pqtLq6On4naqai/V0Zkwpi+czIylJ14eDgW1ZWYt4fAixUD5+xLa6mEGvUjkZZWRk5OTlceeWVFBYWsmHDBqZMmUJRURGDBg3ijjvuqN13+PDhLF68mKqqKrp06cK0adPIy8tj2LBhbNq0CYBbbrmF+++/v3b/adOmMWTIEI477jg++OADAHbt2sWECRPIy8tj0qRJFBUVsXjx4kPKdtttt3HSSSfVls/9zcCqVav44Q9/SF5eHoWFhaxZswaAP/zhDwwePJi8vDxu9qveakwKSvY3/enTITPz4G2ZmW67L7xEjlS6xVpTiFfUrU94TaG0tFRFRD/++OPa17ds2aKqqvv379fhw4drSUmJqqqecsop+umnn+r+/fsV0Llz56qq6g033KB33XWXqqrefPPNet9999Xu/5vf/EZVVV988UUdOXKkqqreddddevXVV6uq6uLFi7VVq1b66aefHlLOUDlqamp04sSJtecrLCzUOXPmqKrq7t27ddeuXTpnzhwdPny4VlZWHvTeprCagkmG5v5NPx6tG1hNIbJEt88dc8wxnHTSSbXPn376aQoLCyksLGTFihUsX778kPe0b9+e0aNHA3DiiSfWfluva/z48Yfs89577zFx4kQA8vLyGDRoUMT3vvnmmwwZMoS8vDzeeecdSkpK2Lp1K5s3b+acc84B3GSzzMxM3njjDS677DLat28PQLdu3aK/EMYkSTp80588GdasgZoad+/HqKOQFhcU+vWLbnusOnToUPu4tLSUBx54gLfeeotAIMCoUaMijttv27Zt7ePWrVtTVVUV8diHHXbYIftosBmoIZWVlUydOpXZs2cTCAS47LLLassRadioqtpwUpNUyRy9E+tnxuTJMGMGZGWBiLufMcPfD/ZYtLigkPD2uTDbt2+nU6dOHH744WzYsIHXXnst7ucYPnw4s2bNAmDp0qURayK7d++mVatW9OjRgx07dvDcc88B0LVrV3r06MFLL70EuEmBlZWVjBgxgr///e/s3r0bgG+++Sbu5TamPvZNP7F8DQoiMkpEVopImYhMi/B6loi8KSIBEXlbRPr4WR5IbtQuLCxk4MCB5OTkcMUVV3DKKafE/RzXXnstX331Fbm5udx7773k5OTQuXPng/bp3r07F198MTk5OZx77rkMHTq09rXi4mLuvfdecnNzGT58OBUVFZx99tmMGjWKoqIi8vPzue++++JebmPqY9/0E8xLx0NTbkBr4HPgaKAtsAQYWGeffwIXBx//EHiisePGY0hqOtu/f7/u3r1bVVVXrVql2dnZun///iSX6gD7XbVMsXSUikTuqBXxfu7MzIPfm5kZ36HozQEeO5r9THMxBChT1dUAIjITGAeEt2cMBG4IPp4PvOBjeVqEnTt3csYZZ1BVVYWq8te//pU2bdImm4lphmJN09Cvn3tPpO1ehM5x882uyahfP9f0k7bf9GPk56dFb+DLsOflwNA6+ywBJgAPAOcC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
 "
 >
 </div>
@@ -13766,7 +13791,7 @@ accuracy: 0.9899250268936157
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[97]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#&lt;Compile your model again (using the same hyper-parameters)&gt;</span>
@@ -13776,8 +13801,8 @@ accuracy: 0.9899250268936157
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
 
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
-<span class="c1">#model.add(BatchNormalization()) #insertion batchnor, between conv and activation</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> <span class="c1">#insertion batchnor, between conv and activation</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>  <span class="c1">#move the active funtion behind the batchnorm</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
@@ -13787,29 +13812,20 @@ accuracy: 0.9899250268936157
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling2D</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
-<span class="c1">#model.add(BatchNormalization()) </span>
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling2D</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
-<span class="c1">#model.add(BatchNormalization()) </span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling2D</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
-
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
@@ -13818,13 +13834,18 @@ accuracy: 0.9899250268936157
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Flatten</span><span class="p">())</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>  <span class="c1">#insertion droupout trick,before 1st dense</span>
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">))</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>  <span class="c1">#insertion droupout trick,before 1st dense</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">))</span>
-<span class="c1">#model.add(BatchNormalization()) </span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> 
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>  <span class="c1">#insertion droupout trick,before 1st dense</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span> 
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">))</span>
 
@@ -13845,79 +13866,83 @@ accuracy: 0.9899250268936157
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Model: &#34;sequential_14&#34;
+<pre>Model: &#34;sequential_6&#34;
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #   
 =================================================================
-conv2d_107 (Conv2D)          (None, 32, 32, 32)        896       
+conv2d_38 (Conv2D)           (None, 8, 8, 32)          896       
 _________________________________________________________________
-activation_136 (Activation)  (None, 32, 32, 32)        0         
+batch_normalization_36 (Batc (None, 8, 8, 32)          128       
 _________________________________________________________________
-conv2d_108 (Conv2D)          (None, 32, 32, 32)        9248      
+activation_46 (Activation)   (None, 8, 8, 32)          0         
 _________________________________________________________________
-batch_normalization_80 (Batc (None, 32, 32, 32)        128       
+conv2d_39 (Conv2D)           (None, 8, 8, 32)          9248      
 _________________________________________________________________
-activation_137 (Activation)  (None, 32, 32, 32)        0         
+batch_normalization_37 (Batc (None, 8, 8, 32)          128       
 _________________________________________________________________
-max_pooling2d_53 (MaxPooling (None, 16, 16, 32)        0         
+activation_47 (Activation)   (None, 8, 8, 32)          0         
 _________________________________________________________________
-conv2d_109 (Conv2D)          (None, 16, 16, 64)        18496     
+max_pooling2d_18 (MaxPooling (None, 4, 4, 32)          0         
 _________________________________________________________________
-activation_138 (Activation)  (None, 16, 16, 64)        0         
+conv2d_40 (Conv2D)           (None, 4, 4, 64)          18496     
 _________________________________________________________________
-conv2d_110 (Conv2D)          (None, 16, 16, 64)        36928     
+batch_normalization_38 (Batc (None, 4, 4, 64)          256       
 _________________________________________________________________
-batch_normalization_81 (Batc (None, 16, 16, 64)        256       
+activation_48 (Activation)   (None, 4, 4, 64)          0         
 _________________________________________________________________
-activation_139 (Activation)  (None, 16, 16, 64)        0         
+max_pooling2d_19 (MaxPooling (None, 2, 2, 64)          0         
 _________________________________________________________________
-max_pooling2d_54 (MaxPooling (None, 8, 8, 64)          0         
+conv2d_41 (Conv2D)           (None, 2, 2, 128)         73856     
 _________________________________________________________________
-conv2d_111 (Conv2D)          (None, 8, 8, 128)         73856     
+batch_normalization_39 (Batc (None, 2, 2, 128)         512       
 _________________________________________________________________
-activation_140 (Activation)  (None, 8, 8, 128)         0         
+activation_49 (Activation)   (None, 2, 2, 128)         0         
 _________________________________________________________________
-conv2d_112 (Conv2D)          (None, 8, 8, 128)         147584    
+conv2d_42 (Conv2D)           (None, 2, 2, 128)         147584    
 _________________________________________________________________
-batch_normalization_82 (Batc (None, 8, 8, 128)         512       
+batch_normalization_40 (Batc (None, 2, 2, 128)         512       
 _________________________________________________________________
-activation_141 (Activation)  (None, 8, 8, 128)         0         
+activation_50 (Activation)   (None, 2, 2, 128)         0         
 _________________________________________________________________
-max_pooling2d_55 (MaxPooling (None, 4, 4, 128)         0         
+conv2d_43 (Conv2D)           (None, 2, 2, 128)         147584    
 _________________________________________________________________
-conv2d_113 (Conv2D)          (None, 4, 4, 256)         295168    
+batch_normalization_41 (Batc (None, 2, 2, 128)         512       
 _________________________________________________________________
-activation_142 (Activation)  (None, 4, 4, 256)         0         
+activation_51 (Activation)   (None, 2, 2, 128)         0         
 _________________________________________________________________
-conv2d_114 (Conv2D)          (None, 4, 4, 256)         590080    
+max_pooling2d_20 (MaxPooling (None, 1, 1, 128)         0         
 _________________________________________________________________
-batch_normalization_83 (Batc (None, 4, 4, 256)         1024      
+flatten_4 (Flatten)          (None, 128)               0         
 _________________________________________________________________
-activation_143 (Activation)  (None, 4, 4, 256)         0         
+dropout_8 (Dropout)          (None, 128)               0         
 _________________________________________________________________
-max_pooling2d_56 (MaxPooling (None, 2, 2, 256)         0         
+dense_12 (Dense)             (None, 256)               33024     
 _________________________________________________________________
-flatten_14 (Flatten)         (None, 1024)              0         
+batch_normalization_42 (Batc (None, 256)               1024      
 _________________________________________________________________
-dropout_29 (Dropout)         (None, 1024)              0         
+activation_52 (Activation)   (None, 256)               0         
 _________________________________________________________________
-dense_43 (Dense)             (None, 512)               524800    
+dropout_9 (Dropout)          (None, 256)               0         
 _________________________________________________________________
-batch_normalization_84 (Batc (None, 512)               2048      
+dense_13 (Dense)             (None, 256)               65792     
 _________________________________________________________________
-activation_144 (Activation)  (None, 512)               0         
+batch_normalization_43 (Batc (None, 256)               1024      
 _________________________________________________________________
-dropout_30 (Dropout)         (None, 512)               0         
+activation_53 (Activation)   (None, 256)               0         
 _________________________________________________________________
-dense_44 (Dense)             (None, 256)               131328    
+dropout_10 (Dropout)         (None, 256)               0         
 _________________________________________________________________
-activation_145 (Activation)  (None, 256)               0         
+dense_14 (Dense)             (None, 128)               32896     
 _________________________________________________________________
-dense_45 (Dense)             (None, 10)                2570      
+batch_normalization_44 (Batc (None, 128)               512       
+_________________________________________________________________
+activation_54 (Activation)   (None, 128)               0         
+_________________________________________________________________
+dense_15 (Dense)             (None, 10)                1290      
 =================================================================
-Total params: 1,834,922
-Trainable params: 1,832,938
-Non-trainable params: 1,984
+Total params: 535,274
+Trainable params: 532,970
+Non-trainable params: 2,304
 _________________________________________________________________
 </pre>
 </div>
@@ -13929,7 +13954,7 @@ _________________________________________________________________
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[98]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#&lt;Train your model on the entire training set (50K samples)&gt;</span>
@@ -13941,7 +13966,7 @@ _________________________________________________________________
               <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizers</span><span class="o">.</span><span class="n">RMSprop</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">),</span>
               <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;acc&#39;</span><span class="p">])</span>
 
-<span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train_vec</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train_vec</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;accuracy: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
 </pre></div>
 
@@ -13959,109 +13984,92 @@ _________________________________________________________________
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch 1/50
-1563/1563 [==============================] - 14s 8ms/step - loss: 1.7411 - acc: 0.3621
-Epoch 2/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 1.0559 - acc: 0.6293
-Epoch 3/50
-1563/1563 [==============================] - 13s 8ms/step - loss: 0.8563 - acc: 0.7095
-Epoch 4/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.7364 - acc: 0.7500
-Epoch 5/50
-1563/1563 [==============================] - 13s 8ms/step - loss: 0.6590 - acc: 0.7795
-Epoch 6/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.6025 - acc: 0.7993
-Epoch 7/50
-1563/1563 [==============================] - 13s 8ms/step - loss: 0.5505 - acc: 0.8219
-Epoch 8/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.4981 - acc: 0.8356
-Epoch 9/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.4747 - acc: 0.8437
-Epoch 10/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.4347 - acc: 0.8596
-Epoch 11/50
-1563/1563 [==============================] - 12s 7ms/step - loss: 0.3961 - acc: 0.8734
-Epoch 12/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.3812 - acc: 0.8781
-Epoch 13/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.3535 - acc: 0.8892
-Epoch 14/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.3449 - acc: 0.8947
-Epoch 15/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.3092 - acc: 0.9045
-Epoch 16/50
-1563/1563 [==============================] - 13s 8ms/step - loss: 0.2860 - acc: 0.9083
-Epoch 17/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.2828 - acc: 0.9131
-Epoch 18/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.2678 - acc: 0.9172
-Epoch 19/50
-1563/1563 [==============================] - 12s 7ms/step - loss: 0.2472 - acc: 0.9253
-Epoch 20/50
-1563/1563 [==============================] - 12s 7ms/step - loss: 0.2407 - acc: 0.9266
-Epoch 21/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.2282 - acc: 0.9305
-Epoch 22/50
-1563/1563 [==============================] - 12s 7ms/step - loss: 0.2172 - acc: 0.9340
-Epoch 23/50
-1563/1563 [==============================] - 12s 7ms/step - loss: 0.2091 - acc: 0.9371
-Epoch 24/50
-1563/1563 [==============================] - 12s 7ms/step - loss: 0.1928 - acc: 0.9421
-Epoch 25/50
-1563/1563 [==============================] - 13s 8ms/step - loss: 0.1863 - acc: 0.9433
-Epoch 26/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1898 - acc: 0.9475
-Epoch 27/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1743 - acc: 0.9490
-Epoch 28/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1738 - acc: 0.9502
-Epoch 29/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1692 - acc: 0.9517
-Epoch 30/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1520 - acc: 0.9567
-Epoch 31/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1548 - acc: 0.9569
-Epoch 32/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1485 - acc: 0.9586
-Epoch 33/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1470 - acc: 0.9604
-Epoch 34/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1477 - acc: 0.9605
-Epoch 35/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1332 - acc: 0.9630
-Epoch 36/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1259 - acc: 0.9655
-Epoch 37/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1250 - acc: 0.9648
-Epoch 38/50
-1563/1563 [==============================] - 12s 7ms/step - loss: 0.1289 - acc: 0.9652
-Epoch 39/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1160 - acc: 0.9687
-Epoch 40/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1136 - acc: 0.9690
-Epoch 41/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1231 - acc: 0.9689
-Epoch 42/50
-1563/1563 [==============================] - 13s 8ms/step - loss: 0.1127 - acc: 0.9704
-Epoch 43/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1184 - acc: 0.9694
-Epoch 44/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1008 - acc: 0.9729
-Epoch 45/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1118 - acc: 0.9705
-Epoch 46/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.0951 - acc: 0.9735
-Epoch 47/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1058 - acc: 0.9743
-Epoch 48/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1073 - acc: 0.9740
-Epoch 49/50
-1563/1563 [==============================] - 13s 8ms/step - loss: 0.1014 - acc: 0.9748
-Epoch 50/50
-1563/1563 [==============================] - 12s 8ms/step - loss: 0.1010 - acc: 0.9749
-1250/1250 [==============================] - 4s 3ms/step - loss: 0.2205 - acc: 0.9600
-accuracy: 0.9600499868392944
-</pre>
+<pre>Epoch 1/10
+1563/1563 [==============================] - 90s 55ms/step - loss: 2.0499 - acc: 0.2208
+Epoch 2/10
+1563/1563 [==============================] - 86s 55ms/step - loss: 1.5506 - acc: 0.4284
+Epoch 3/10
+1563/1563 [==============================] - 84s 54ms/step - loss: 1.3817 - acc: 0.5043
+Epoch 4/10
+1563/1563 [==============================] - 82s 52ms/step - loss: 1.2648 - acc: 0.5545 
+Epoch 5/10
+1563/1563 [==============================] - 83s 53ms/step - loss: 1.1945 - acc: 0.5839
+Epoch 6/10
+1563/1563 [==============================] - 82s 52ms/step - loss: 1.1239 - acc: 0.6119
+Epoch 7/10
+1563/1563 [==============================] - 87s 55ms/step - loss: 1.0772 - acc: 0.6317
+Epoch 8/10
+1563/1563 [==============================] - 83s 53ms/step - loss: 1.0185 - acc: 0.6555
+Epoch 9/10
+ 376/1563 [======&gt;.......................] - ETA: 1:02 - loss: 0.9663 - acc: 0.6700- ETA: 1:03 - loss: 0.9661 - ac - ETA: 1:02 - loss: 0.9662 - acc: 0.67</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">KeyboardInterrupt</span>                         Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-29-b25999c7e1ab&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">      8</span>               metrics=[&#39;acc&#39;])
+<span class="ansi-green-fg">      9</span> 
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 10</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>history <span class="ansi-yellow-intense-fg ansi-bold">=</span> model<span class="ansi-yellow-intense-fg ansi-bold">.</span>fit<span class="ansi-yellow-intense-fg ansi-bold">(</span>x_train<span class="ansi-yellow-intense-fg ansi-bold">,</span> y_train_vec<span class="ansi-yellow-intense-fg ansi-bold">,</span> batch_size<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">32</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> epochs<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">10</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     11</span> print<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;accuracy: &#39;</span> <span class="ansi-yellow-intense-fg ansi-bold">+</span> str<span class="ansi-yellow-intense-fg ansi-bold">(</span>model<span class="ansi-yellow-intense-fg ansi-bold">.</span>evaluate<span class="ansi-yellow-intense-fg ansi-bold">(</span>x_tr<span class="ansi-yellow-intense-fg ansi-bold">,</span> y_tr<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">1</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\tensorflow\python\keras\engine\training.py</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-intense-fg ansi-bold">(self, x, y, batch_size, epochs, verbose, callbacks, validation_split, validation_data, shuffle, class_weight, sample_weight, initial_epoch, steps_per_epoch, validation_steps, validation_batch_size, validation_freq, max_queue_size, workers, use_multiprocessing)</span>
+<span class="ansi-green-fg">   1098</span>                 _r=1):
+<span class="ansi-green-fg">   1099</span>               callbacks<span class="ansi-yellow-intense-fg ansi-bold">.</span>on_train_batch_begin<span class="ansi-yellow-intense-fg ansi-bold">(</span>step<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 1100</span><span class="ansi-yellow-intense-fg ansi-bold">               </span>tmp_logs <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>train_function<span class="ansi-yellow-intense-fg ansi-bold">(</span>iterator<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">   1101</span>               <span class="ansi-green-intense-fg ansi-bold">if</span> data_handler<span class="ansi-yellow-intense-fg ansi-bold">.</span>should_sync<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">   1102</span>                 context<span class="ansi-yellow-intense-fg ansi-bold">.</span>async_wait<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\tensorflow\python\eager\def_function.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-intense-fg ansi-bold">(self, *args, **kwds)</span>
+<span class="ansi-green-fg">    826</span>     tracing_count <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>experimental_get_tracing_count<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    827</span>     <span class="ansi-green-intense-fg ansi-bold">with</span> trace<span class="ansi-yellow-intense-fg ansi-bold">.</span>Trace<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_name<span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-green-intense-fg ansi-bold">as</span> tm<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 828</span><span class="ansi-yellow-intense-fg ansi-bold">       </span>result <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_call<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">*</span>args<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwds<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    829</span>       compiler <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-blue-intense-fg ansi-bold">&#34;xla&#34;</span> <span class="ansi-green-intense-fg ansi-bold">if</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_experimental_compile <span class="ansi-green-intense-fg ansi-bold">else</span> <span class="ansi-blue-intense-fg ansi-bold">&#34;nonXla&#34;</span>
+<span class="ansi-green-fg">    830</span>       new_tracing_count <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>experimental_get_tracing_count<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\tensorflow\python\eager\def_function.py</span> in <span class="ansi-cyan-fg">_call</span><span class="ansi-blue-intense-fg ansi-bold">(self, *args, **kwds)</span>
+<span class="ansi-green-fg">    853</span>       <span class="ansi-red-intense-fg ansi-bold"># In this case we have created variables on the first call, so we run the</span>
+<span class="ansi-green-fg">    854</span>       <span class="ansi-red-intense-fg ansi-bold"># defunned version which is guaranteed to never create variables.</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 855</span><span class="ansi-yellow-intense-fg ansi-bold">       </span><span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_stateless_fn<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">*</span>args<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwds<span class="ansi-yellow-intense-fg ansi-bold">)</span>  <span class="ansi-red-intense-fg ansi-bold"># pylint: disable=not-callable</span>
+<span class="ansi-green-fg">    856</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_stateful_fn <span class="ansi-green-intense-fg ansi-bold">is</span> <span class="ansi-green-intense-fg ansi-bold">not</span> <span class="ansi-green-intense-fg ansi-bold">None</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    857</span>       <span class="ansi-red-intense-fg ansi-bold"># Release the lock early so that multiple threads can perform the call</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\tensorflow\python\eager\function.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-intense-fg ansi-bold">(self, *args, **kwargs)</span>
+<span class="ansi-green-fg">   2941</span>        filtered_flat_args) = self._maybe_define_function(args, kwargs)
+<span class="ansi-green-fg">   2942</span>     return graph_function._call_flat(
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 2943</span><span class="ansi-yellow-intense-fg ansi-bold">         filtered_flat_args, captured_inputs=graph_function.captured_inputs)  # pylint: disable=protected-access
+</span><span class="ansi-green-fg">   2944</span> 
+<span class="ansi-green-fg">   2945</span>   <span class="ansi-yellow-intense-fg ansi-bold">@</span>property
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\tensorflow\python\eager\function.py</span> in <span class="ansi-cyan-fg">_call_flat</span><span class="ansi-blue-intense-fg ansi-bold">(self, args, captured_inputs, cancellation_manager)</span>
+<span class="ansi-green-fg">   1917</span>       <span class="ansi-red-intense-fg ansi-bold"># No tape is watching; skip to running the function.</span>
+<span class="ansi-green-fg">   1918</span>       return self._build_call_outputs(self._inference_function.call(
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 1919</span><span class="ansi-yellow-intense-fg ansi-bold">           ctx, args, cancellation_manager=cancellation_manager))
+</span><span class="ansi-green-fg">   1920</span>     forward_backward = self._select_forward_and_backward_functions(
+<span class="ansi-green-fg">   1921</span>         args<span class="ansi-yellow-intense-fg ansi-bold">,</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\tensorflow\python\eager\function.py</span> in <span class="ansi-cyan-fg">call</span><span class="ansi-blue-intense-fg ansi-bold">(self, ctx, args, cancellation_manager)</span>
+<span class="ansi-green-fg">    558</span>               inputs<span class="ansi-yellow-intense-fg ansi-bold">=</span>args<span class="ansi-yellow-intense-fg ansi-bold">,</span>
+<span class="ansi-green-fg">    559</span>               attrs<span class="ansi-yellow-intense-fg ansi-bold">=</span>attrs<span class="ansi-yellow-intense-fg ansi-bold">,</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 560</span><span class="ansi-yellow-intense-fg ansi-bold">               ctx=ctx)
+</span><span class="ansi-green-fg">    561</span>         <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    562</span>           outputs = execute.execute_with_cancellation(
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\tensorflow\python\eager\execute.py</span> in <span class="ansi-cyan-fg">quick_execute</span><span class="ansi-blue-intense-fg ansi-bold">(op_name, num_outputs, inputs, attrs, ctx, name)</span>
+<span class="ansi-green-fg">     58</span>     ctx<span class="ansi-yellow-intense-fg ansi-bold">.</span>ensure_initialized<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     59</span>     tensors = pywrap_tfe.TFE_Py_Execute(ctx._handle, device_name, op_name,
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 60</span><span class="ansi-yellow-intense-fg ansi-bold">                                         inputs, attrs, num_outputs)
+</span><span class="ansi-green-fg">     61</span>   <span class="ansi-green-intense-fg ansi-bold">except</span> core<span class="ansi-yellow-intense-fg ansi-bold">.</span>_NotOkStatusException <span class="ansi-green-intense-fg ansi-bold">as</span> e<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">     62</span>     <span class="ansi-green-intense-fg ansi-bold">if</span> name <span class="ansi-green-intense-fg ansi-bold">is</span> <span class="ansi-green-intense-fg ansi-bold">not</span> <span class="ansi-green-intense-fg ansi-bold">None</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+
+<span class="ansi-red-intense-fg ansi-bold">KeyboardInterrupt</span>: </pre>
 </div>
 </div>
 
@@ -14079,10 +14087,10 @@ accuracy: 0.9600499868392944
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[99]:</div>
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">loss_and_acc</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span><span class="n">y_test_vec</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">loss_and_acc</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test_vec</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;loss = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">loss_and_acc</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;accuracy = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">loss_and_acc</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 </pre></div>
@@ -14101,9 +14109,9 @@ accuracy: 0.9600499868392944
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>313/313 [==============================] - 1s 4ms/step - loss: 1.7392 - acc: 0.8138
-loss = 1.7392146587371826
-accuracy = 0.8137999773025513
+<pre>313/313 [==============================] - 2s 5ms/step - loss: 1.8915 - acc: 0.5903
+loss = 1.8914798498153687
+accuracy = 0.5903000235557556
 </pre>
 </div>
 </div>
